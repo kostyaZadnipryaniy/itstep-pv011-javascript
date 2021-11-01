@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // function hello() {
+        //     console.log("Hello World");
+        // }
+        // hello()
+
+
+        // function hello() {
+        //     console.log("Hello World");
+        // }
+        // const message = hello;
+        // message();
+
+
+        // function goodMorning() {
+        //     console.log("Доброе утро");
+        // }
+        // function goodEvening() {
+        //     console.log("Добрый вечер");
+        // }
+        // let message = goodMorning;      // присваиваем переменной message функцию goodMorning
+        // message();      // Доброе утро
+        // message = goodEvening;          // меняем функцию в переменной message
+        // message();      // Добрый вечер
+
+        // let message = function () {
+        //     console.log("Hello JavaScript");
+        // }
+        // message();
+
+        // ---- Параметры
+
+        // function print(message) {
+        //     console.log(message);
+        // }
+
+        // print("Hello JavaScript");
+        // print("Hello World");
+        // print("Function in JavaScript");
+
+        // function print(message) {
+        //     console.log(message);
+        // }
+        // print();
+
+
+        // function sum(a, b) {
+        //     const result = a + b;
+        //     console.log(result);
+        // }
+
+        // sum(2, 6);          // 8
+        // sum(4, 5);          // 9
+        // sum(109, 11);       // 120
+
+        // es6 <
+        // function sum(x, y) {
+        //     if (y === undefined) y = 5;
+        //     if (x === undefined) x = 8;
+        //     const z = x + y;
+        //     console.log(z);
+        // }
+        // sum();          // 13
+        // sum(6);         // 11
+        // sum(6, 4)       // 10
+
+        // // es6 >=
+        // function sum(x = 8, y = 5) {
+        //     const z = x + y;
+        //     console.log(z);
+        // }
+        // sum();      // 13
+        // sum(6);     // 11
+        // sum(6, 4)   // 10
+
+        // function sum(x = 8, y = 10 + x) {
+
+        //     const z = x + y;
+        //     console.log(z);
+        // }
+        // sum();      // 26
+        // sum(6);     // 22
+        // sum(6, 4)   // 10
+
+        // Массив arguments
+        // function sum() {
+        //     let result = 0;
+        //     for (const n of arguments)
+        //         result += n;
+        //     console.log(result);
+        // }
+        // sum(6);             // 6
+        // sum(6, 4)           // 10
+        // sum(6, 4, 5)        // 15
+
+        // Неопределенное количество параметров
+        // function display(season, ...temps) {
+        //     console.log(season);
+        //     for (index in temps) {
+        //         console.log(temps[index]);
+        //     }
+        // }
+        // display("Весна", -2, -3, 4, 2, 5);
+        // display("Лето", 20, 23, 31);
+
+        // Функции в качестве параметров
+        // function sum(x, y) {
+        //     return x + y;
+        // }
+
+        // function subtract(x, y) {
+        //     return x - y;
+        // }
+
+        // function operation(x, y, func) {
+
+        //     const result = func(x, y);
+        //     console.log(result);
+        // }
+
+        // console.log("Sum");
+        // operation(10, 6, sum);  // 16
+
+        // console.log("Subtract");
+        // operation(10, 6, subtract); // 4
+
+        // return 
+        // function sum(a, b) {
+        //     const result = a + b;
+        //     return result;
+        // }
+        // console.log(sum(4, 5))
+
+        // function sum(a, b) {
+        //     return a + b;
+        // }
+        // let num1 = sum(2, 4);
+        // console.log(num1);  // 6
+
+        // const num2 = sum(6, 34);
+        // console.log(num2);  // 40
+
+        // Возвращение функции из функции
+        // function menu(n) {
+        //     if (n == 1) return function (x, y) { return x + y; }
+        //     else if (n == 2) return function (x, y) { return x - y; }
+        //     else if (n == 3) return function (x, y) { return x * y; }
+        //     return function () { return 0; }
+        // }
+
+        // const action = menu(1);         // выбираем первый пункт - сложение
+        // const result = action(2, 5);    // выполняем функцию и получаем результат в константу result
+        // console.log(result);            // 7
+
+        // -----Область видимости переменных
+        // var a = 5;
+        // let b = 8;
+        // const c = 9;
+
+        // function displaySum() {
+        //     var d = a + b + c;
+        //     console.log(d);
+        // }
+        // displaySum(); // 22
+
+        // Переменные и константы функции
+        // function print() {
+        //     var a = 5;
+        //     let b = 8;
+        //     const c = 9;
+        //     console.log("Function print: a =", a);
+        //     console.log("Function print: b =", b);
+        //     console.log("Function print: c =", c);
+        // }
+        // print();
+        // console.log("Global: a =", a);  // Uncaught ReferenceError: a is not defined
+
+        // -----Локальные переменные в блоках кода, условиях и циклах
+
+        // безымянный блок
+        // {
+        //     var a = 5;
+        // }
+        // console.log("a =", a);  // a = 5
+
+        // // условная конструкция
+        // if (true) {
+        //     var b = 6;
+        // }
+        // console.log("b =", b);  // b = 6
+
+        // // цикл
+        // for (var i = 0; i < 5; i++) {
+        //     var c = 7;
+        // }
+        // console.log("c =", c);  // c = 7
+
+        // if (false) {
+        //     var b = 6;
+        // }
+        // console.log("b =", b);  // b = undefined
+
+        // // цикл
+        // for (var i = 1; i < 0; i++) {
+        //     var c = 7;
+        // }
+        // console.log("c =", c);  // c = undefined
+
+        // // Переменная let и константы
+        // {
+        //     let a = 5;
+        // }
+        // console.log("a =", a);  // Uncaught ReferenceError: a is not defined
+
+        // {
+        //     const b = 5;
+        // }
+        // console.log("b =", b);  // Uncaught ReferenceError: b is not defined
+
+        // // Сокрытие переменных
+        // var z = 89;
+        // function print() {
+        //     var z = 10;
+        //     console.log(z); // 10
+        // }
+        // print(); // 10
+
+        // function displayZ() {
+        //     var z = 20;
+        //     {
+        //         var z = 30; // Ошибка ! Переменная z уже определена
+        //         console.log("Block:", z);
+        //     }
+        //     console.log("Function:", z);
+        // }
+
+        // // Скрытие переменной let
+
+        // let z = 10;
+        // function displayZ() {
+        //     let z = 20;
+        //     {
+        //         let z = 30;
+        //         console.log("Block:", z);
+        //     }
+        //     console.log("Function:", z);
+        // }
+
+        // displayZ();
+        // console.log("Global:", z);
+
+    </script>
+</body>
+
+</html>
