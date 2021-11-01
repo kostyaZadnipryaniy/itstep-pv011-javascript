@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <style>
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form>* {
+            margin-bottom: 10px;
+        }
+
+        .errors {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="errors"></div>
+    <form novalidate>
+        <label for="">
+            Email:
+            <input type="email" name="email">
+        </label>
+        <label for="">
+            Password:
+            <input type="password" name="password">
+        </label>
+        <label for="">
+            Repeat:
+            <input type="password" name="repassword">
+        </label>
+        <button>Signup</button>
+    </form>
+
+    <script src="cookie.js"></script>
+    <script>
+        const signupForm = document.forms[0]
+        const errorBlock = document.querySelector('.errors')
+
+        function validateEmail(email) {
+            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        function checkPassword(str) {
+            console.log({ str })
+            const re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+            return re.test(str);
+        }
+
+
+        function validate(type, value, compared) {
+
+            if (!value) {
+                return { result: false, message: `Field: '${type}' must be required!` }
+            }
+
+            switch (type) {
+                case 'email':
+                    if (!validateEmail(value)) {
+                        return { result: false, message: 'Email is invalid' }
+                    }
+                    break;
+                case 'password':
+                    if (!checkPassword(value)) {
+                        return { result: false, message: 'Password is invalid' }
+                    }
+                    break;
+                case 'repassword':
+                    if (compared && compared !== value) {
+                        return { result: false, message: 'Password not match' }
+                    }
+                    break;
+            }
+            return { result: true, message: null }
+        }
+
+        signupForm.addEventListener('submit', e => {
+            e.preventDefault()
+
+            const email = e.target.elements['email'].value
+            const password = e.target.elements['password'].value
+            const repassword = e.target.elements['repassword'].value
+
+            const body = { email, password, repassword }
+
+            let validation = []
+
+            Object.keys(body).forEach(key => {
+                validation.push(validate(key, body[key], password))
+            })
+
+            if (validation.some(v => !v.result)) {
+                console.log(validation)
+                const errorMsg = validation.reduce((acc, v) => {
+                    return acc +  (!v.result ? `<p>${v.message}</p>` : '') 
+                }, '')
+                errorBlock.innerHTML = errorMsg
+                return 
+            }
+
+            errorBlock.innerHTML = ''
+            
+            for (const key in body) {
+                setCookie(key, body[key])
+            }
+
+            window.location.href = '/profile.html'
+        })
+    </script>
+</body>
+
+</html>
