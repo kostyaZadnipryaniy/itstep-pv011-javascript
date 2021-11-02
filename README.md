@@ -6,3 +6,4 @@
 - 4_module: Browser Object Model.Document Object Model
 - 5_module: Формы
 - 6_module: Проверка достоверности форм. Использование Cookie
+- 7_module: Рисование с помощью canvas.
