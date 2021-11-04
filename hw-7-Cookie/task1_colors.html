@@ -16,8 +16,15 @@
             width: 100%;
         }
 
-        h2 {
+        h2,
+        h4 {
             text-align: center;
+            margin: 0px;
+            margin-top: 2%;
+        }
+
+        h4 {
+            margin-top: 5%;
         }
 
         select {
@@ -25,6 +32,9 @@
             margin-left: 2%;
         }
 
+        .error-message{
+           margin:0px
+        }
         .color-selector {
             display: flex;
             flex-direction: column;
@@ -53,6 +63,7 @@
             <label for="">
                 Color:
                 <input type="text" name="color">
+                <p class="error-message">q</p>
             </label>
             <label for="">
                 Type:
@@ -65,6 +76,7 @@
             <label for="">
                 Code:
                 <input type="text" name="code">
+                <p class="error-message">q</p>
             </label>
             <button>Save</button>
         </form>
@@ -84,35 +96,51 @@
     <script src="cookie.js"></script>
     <script>
 
-        // function validate(name, type, code) {
-        //     //название: 
-        //     //1)наличие 2)повторение(в куки)
-        //     //
-        //     //
+        function isValidHex(color) {
+            if (!color || typeof color !== 'string') return false;
+            // Validate hex values
+            //https://colorscheme.ru/html-colors.html
+            if (color.substring(0, 1) === '#') color = color.substring(1);
+            switch (color.length) {
+                case 3: return /^[0-9A-F]{3}$/i.test(color);
+                case 6: return /^[0-9A-F]{6}$/i.test(color);
+                case 8: return /^[0-9A-F]{8}$/i.test(color);
+                default: return false;
+            }
+            return false;
+        }
 
-        //     if (!value) {
-        //         return { result: false, message: `Field: '${type}' must be required!` }
-        //     }
+        function error(stringIndexError, errorMessage) {
+            let errorField = document.querySelectorAll(".error-message")
+            if (stringIndexError == "color") {
+                errorField[0].innerHTML = errorMessage
+            } else {
+                errorField[1].innerHTML = errorMessage
+            }
+            
+        }
 
-        //     switch (type) {
-        //         case 'email':
-        //             if (!validateEmail(value)) {
-        //                 return { result: false, message: 'Email is invalid' }
-        //             }
-        //             break;
-        //         case 'password':
-        //             if (!checkPassword(value)) {
-        //                 return { result: false, message: 'Password is invalid' }
-        //             }
-        //             break;
-        //         case 'repassword':
-        //             if (compared && compared !== value) {
-        //                 return { result: false, message: 'Password not match' }
-        //             }
-        //             break;
-        //     }
-        //     return { result: true, message: null }
-        // }
+        function validate(color, type, code) {
+            if (!color) {
+                exceptionHandler("color","This field is requaried")
+            }
+        
+            switch (type) {
+                case 'RGB':
+                   
+                    if (!validateColor(value)) {
+
+                        return { result: false, message: 'Email is invalid' }
+                    }
+                    break;
+                case 'RGBA':
+                    if (!checkPassword(value)) {
+                        return { result: false, message: 'Password is invalid' }
+                    }
+                    break;
+            }
+            return { result: true, message: null }
+        }
 
 
 
@@ -128,21 +156,28 @@
 
 
             // console.log(color, type, code)
+            if (validate(color, type, code) != 0) {
 
             let newDiv = document.createElement("div");
 
-            // console.log(newDiv)
-            newDiv.innerHTML = "<h1>Привет!</h1>";
+            newDiv.style.border = `80px solid ${code}`
+            newDiv.innerHTML = `<h2>${color}</h2> <h4>${type}</h4> <h2>${code}</h2>`;
             newDiv.style.backgroundColor = "bisque"
-            newDiv.style.height = "40vh"
-            newDiv.style.width = "94%"
-            newDiv.style.marginLeft = "3%"
-            newDiv.style.marginRight = ""
+            newDiv.style.height = "20vh"
+            newDiv.style.width = "32vh"
+            newDiv.style.marginLeft = "1vh"
+            newDiv.style.marginRight = "1vh"
             newDiv.style.marginBottom = "5%"
             let d1 = document.querySelector('.colors');
             // console.log(d1)
             // d1.insertAdjacentHTML('afterbegin', newDiv.innerHTML);
             d1.prepend(newDiv);
+
+            }
+
+    
+
+
         })
     </script>
 </body>
