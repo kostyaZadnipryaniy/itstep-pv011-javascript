@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 100%;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        select {
+            width: 78%;
+            margin-left: 2%;
+        }
+
+        .color-selector {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .colors-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .colors {
+            display: grid;
+            grid-template-columns: 2fr 2fr 2fr;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="color-selector">
+        <h2>Create new color</h2>
+        <form>
+            <label for="">
+                Color:
+                <input type="text" name="color">
+            </label>
+            <label for="">
+                Type:
+                <select name="type">
+                    <option>RGB</option>
+                    <option>RGBA</option>
+                    <option>HEX</option>
+                </select>
+            </label>
+            <label for="">
+                Code:
+                <input type="text" name="code">
+            </label>
+            <button>Save</button>
+        </form>
+    </div>
+    <div class="colors-container">
+        <h2>All Colors</h2>
+        <div class="colors">
+            <!-- <div style="background-color: bisque; height: 40vh; ">qwe</div>
+            <div>qwe</div>
+            <div>qwe</div> -->
+
+
+        </div>
+    </div>
+
+
+    <script src="cookie.js"></script>
+    <script>
+
+        // function validate(name, type, code) {
+        //     //название: 
+        //     //1)наличие 2)повторение(в куки)
+        //     //
+        //     //
+
+        //     if (!value) {
+        //         return { result: false, message: `Field: '${type}' must be required!` }
+        //     }
+
+        //     switch (type) {
+        //         case 'email':
+        //             if (!validateEmail(value)) {
+        //                 return { result: false, message: 'Email is invalid' }
+        //             }
+        //             break;
+        //         case 'password':
+        //             if (!checkPassword(value)) {
+        //                 return { result: false, message: 'Password is invalid' }
+        //             }
+        //             break;
+        //         case 'repassword':
+        //             if (compared && compared !== value) {
+        //                 return { result: false, message: 'Password not match' }
+        //             }
+        //             break;
+        //     }
+        //     return { result: true, message: null }
+        // }
+
+
+
+
+        const addColorForm = document.forms[0]
+        addColorForm.addEventListener('submit', (e) => {
+            e.preventDefault()
+            const color = e.target.elements['color'].value
+
+            const type = e.target.elements['type'].value
+
+            const code = e.target.elements['code'].value
+
+
+            // console.log(color, type, code)
+
+            let newDiv = document.createElement("div");
+
+            // console.log(newDiv)
+            newDiv.innerHTML = "<h1>Привет!</h1>";
+            newDiv.style.backgroundColor = "bisque"
+            newDiv.style.height = "40vh"
+            newDiv.style.width = "94%"
+            newDiv.style.marginLeft = "3%"
+            newDiv.style.marginRight = ""
+            newDiv.style.marginBottom = "5%"
+            let d1 = document.querySelector('.colors');
+            // console.log(d1)
+            // d1.insertAdjacentHTML('afterbegin', newDiv.innerHTML);
+            d1.prepend(newDiv);
+        })
+    </script>
+</body>
+
+</html>
