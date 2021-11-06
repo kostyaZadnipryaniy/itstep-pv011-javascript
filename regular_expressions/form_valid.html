@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        form{margin: auto;}
+        form{
+            background-color: antiquewhite;
+            padding: 5%;
+            width: 50%;
+        }
+        input, select, button{
+            margin: 10px;
+            width: 200px;
+        }
+        p{
+            text-align: center;
+            font-weight: 900;
+        }
+        div{
+            display: inline-block;
+            border: solid 20px rgba(255,255,255,0.2);
+            margin: 5px;
+            width: 25%;
+            text-align: center;
+        }
+        #YELLOWGREEN{background-color: YELLOWGREEN;}
+        #DARKCYAN{background-color: DARKCYAN;}
+        #ORANGERED{background-color: ORANGERED;}
+    </style>
+    <title>formValid</title>
+</head>
+<body>
+    <form>
+        <p>Create new color</p>
+        <label for="color">Color:</label> <br>
+        <input type="text" name="color" id="color" pattern="[a-z]+\i" required><br>
+        <label for="type">Type:</label><br>
+        <select name="type" id="type">
+            <option value="RGB">RGB</option>
+            <option value="RGBA">RGBA</option>
+            <option value="HEX">HEX</option>
+        </select><br>
+        <label for="code">Code:</label> <br>
+        <input type="text" name="code" id="code" required><br>
+        <button>Save</button>
+        <p>All colors</p>
+        <div id="YELLOWGREEN">YELLOWGREEN <br> RGB <br> 154,205,50</div>
+        <div id="DARKCYAN">DARKCYAN <br> RGBA <br> 0,139,139,1</div>
+        <div id="ORANGERED">ORANGERED <br> HEX <br> #FF4500</div>        
+    </form>
+    <script src="formValid.js"></script>
+</body>
+</html>
