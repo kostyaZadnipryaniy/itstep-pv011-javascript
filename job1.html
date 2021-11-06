@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        form{
+            background-color: antiquewhite;
+        }
+        p{
+        text-align: center;
+        font-weight: bold;
+        }
+        label, input{
+            margin: 50px;
+        }
+        button{
+            width: 90%;
+            margin: 50px;
+        }
+        div{
+            border: 1px solid black;
+            padding: 5px;
+            background-color: blanchedalmond;
+        }
+        .newMessage{
+            border: 3px solid black;
+            margin: 30px;
+        }
+        .message{
+            padding-left: 30px;
+        }
+        textarea{
+            margin: 10px;
+        }
+        span{float: right;}
+    </style>
+    <title>job</title>
+</head>
+<body>
+    <form novalidate id="View">
+        <p>Add new message:</p>
+        <label for="inputName">
+            Your name: <input type="text" id="name" name="name" required
+            minlength="4" maxlength="80" size="150">
+        </label>
+        <label for="inputMessage">
+            Your message: <textarea name="message" id="message" cols="140" rows="10"></textarea>
+        </label>
+        <button>Send</button>
+    </form>
+    <script src="job1.js"></script>
+</body>
+</html>

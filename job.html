@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        form{
+            background-color: antiquewhite;
+            width: 420px;
+            padding: 10px;
+        }
+        button{
+            width: 400px;
+        }
+        #paragraph{
+            background-color: antiquewhite;
+            width: 450px;
+            padding: 10px;
+            border: black solid 2px ;
+            margin: 10px;
+        }
+    </style>
+    <title>job</title>
+</head>
+<body>
+    <form novalidate id="formm">
+        <label>
+        <input type="checkbox" id="Bold">
+            Bold
+        </label>
+        <label>
+            <input type="checkbox" id="Underline">
+            Underline
+        </label>
+        <label>
+            <input type="checkbox" id="Italic">
+            Italic
+        </label>
+        <label>
+            <input type="radio" name="align" value = "left">
+            Left
+        </label>
+        <label>
+            <input type="radio" name="align" value = "right">
+            Right
+        </label>
+        <label>
+            <input type="radio" name="align" value = "justify">
+            Justify
+        </label> <br>
+        <textarea name="textArea" id="textArea" cols="50" rows="10"></textarea> <br>
+        <button class="next">Next</button>
+    </form>
+    <div id="paragraph"></div>
+            <script src="job.js"></script>
+</body>
+</html>
