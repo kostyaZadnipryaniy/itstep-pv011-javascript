@@ -1,6 +1,6 @@
 ### js_and_jquery
 
-- 1_module: Введение в JavaScript
+- 1_module: Введение в JavaScript.
 - 2_module: Объект. Массивы. Объект Array. Строки. Объект String. Объект Date. Объект Math. Введение в ООП
 - 3_module: Обработка событий
 - 4_module: Browser Object Model.Document Object Model
