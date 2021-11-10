@@ -2,9 +2,12 @@ const profileContainer = document.getElementById('profile__container')
 const profileForm = document.forms[0]
 const reposContainer = document.getElementById('repos__container')
 const pagContainer = document.getElementById('pag__container')
+const loader = document.getElementById('loader')
 
 let api = null
 let pagResult = ''
+
+loader.style.display = 'none'
 
 class ProfileCard {
     constructor(obj) {
@@ -45,11 +48,13 @@ class Api {
 
     constructor(reposPerPage = 4) {
         this.reposPerPage = reposPerPage
-        this.loading = false
         this.profileCard = null
     }
 
     getUser(userName) {
+
+        pagContainer.innerHTML = '', reposContainer.innerHTML = ''
+
         const $this = this
         const xml = new XMLHttpRequest()
 
@@ -60,10 +65,12 @@ class Api {
         xml.onreadystatechange = function () {
             switch (this.readyState) {
                 case 3:
-                    $this.loading = true
+                    loader.style.display = 'flex'
                     break
                 case 4:
-                    $this.loading = false
+                    setTimeout(() => {
+                        loader.style.display = 'none'
+                    }, 1000)
 
                     const response = JSON.parse(this.responseText)
                     switch (this.status) {
@@ -97,10 +104,9 @@ class Api {
     }
 
     getRepoList() {
-        console.log(pagResult)
         if (pagResult) {
             pagContainer.innerHTML = `
-                <nav aria-label="Page navigation example">
+                <nav aria-label="Page navigation example" class="d-flex justify-content-center">
                 <ul class="pagination">
                 <li class="page-item  disabled">
                     <a class="page-link" href="#" aria-label="Previous">
@@ -135,10 +141,15 @@ class Api {
             pagResult = ''
         }
 
+        loader.style.display = 'flex'
+
         const xml = new XMLHttpRequest()
         xml.open('GET', `https://api.github.com/users/${this.profileCard.login}/repos?page=${this.#currentPage}&per_page=${this.reposPerPage}`)
         xml.send(null)
         xml.onload = function () {
+            setTimeout(() => {
+                loader.style.display = 'none'
+            }, 1000)
             const response = JSON.parse(this.responseText) || []
 
             const repoListHtml = response.reduce((acc, repo) => {
