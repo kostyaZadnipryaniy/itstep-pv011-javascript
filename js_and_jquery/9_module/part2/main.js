@@ -4,6 +4,7 @@ const reposContainer = document.getElementById('repos__container')
 const pagContainer = document.getElementById('pag__container')
 
 let api = null
+let pagResult = ''
 
 class ProfileCard {
     constructor(obj) {
@@ -53,11 +54,11 @@ class Api {
         const xml = new XMLHttpRequest()
 
         xml.open('GET', `${this.#baseUrl}${userName}`, true)
-    
+
         xml.send(null)
-    
-        xml.onreadystatechange = function() {
-            switch(this.readyState) {
+
+        xml.onreadystatechange = function () {
+            switch (this.readyState) {
                 case 3:
                     $this.loading = true
                     break
@@ -65,7 +66,7 @@ class Api {
                     $this.loading = false
 
                     const response = JSON.parse(this.responseText)
-                    switch(this.status) {
+                    switch (this.status) {
                         case 200:
                             // if response finished successfully
                             $this.profileCard = new ProfileCard(response)
@@ -74,53 +75,94 @@ class Api {
 
                             const reposPageCount = Math.ceil($this.profileCard.public_repos / $this.reposPerPage)
 
-                            let pagResult = ''
+                            pagResult = ''
+                         
                             for (let i = 0; i < reposPageCount; i++) {
                                 pagResult += `<li class="page-item"><a class="page-link" href="#">${i + 1}</a></li>`
                             }
 
-                            pagContainer.innerHTML = `
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination">
-                                    <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                    </li>
-                                    ${pagResult}
-                                    <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                    </li>
-                                </ul>
-                            </nav> 
-                            `
-
                             const repoBtn = document.getElementById('repo_btn')
-    
+
                             repoBtn.addEventListener('click', $this.getRepoList.bind($this))
-    
+
                             break;
                         case 404:
                             // handle errors (if user not found)
                             alert(`${this.status}, ${response.message}`)
                             break;
                     }
-                    break 
+                    break
             }
         }
     }
 
     getRepoList() {
+        console.log(pagResult)
+        if (pagResult) {
+            pagContainer.innerHTML = `
+                <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                <li class="page-item  disabled">
+                    <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                ${pagResult}
+                <li class="page-item  disabled">
+                    <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                </ul>
+                </nav> 
+            `
+
+            const pageItems = document.getElementsByClassName('page-item')
+
+            for (let i = 0; i < pageItems.length; i++) {
+                pageItems[i].addEventListener('click', e => {
+                    e.preventDefault()
+
+                    const currentPage = e.target.textContent
+                    if (typeof +currentPage === 'number') {
+                        this.#currentPage = +currentPage
+                    }
+
+                    this.getRepoList()
+                })
+            }
+
+            pagResult = ''
+        }
+
         const xml = new XMLHttpRequest()
         xml.open('GET', `https://api.github.com/users/${this.profileCard.login}/repos?page=${this.#currentPage}&per_page=${this.reposPerPage}`)
         xml.send(null)
-        xml.onload = function() {
-            const response = JSON.parse(this.responseText)
-            console.log(response)
+        xml.onload = function () {
+            const response = JSON.parse(this.responseText) || []
+
+            const repoListHtml = response.reduce((acc, repo) => {
+                return acc + `
+                <div class="col-md-3">
+                    <div class="card mb-2">
+                        <div class="card-body">
+                        <h5 class="card-title">${repo.name}</h5>
+                        <p class="card-text">${repo.id}</p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Watchers: ${repo.watchers}</li>
+                            <li class="list-group-item">Forks: ${repo.forks}</li>
+                            <li class="list-group-item">Disabled: ${repo.disabled}</li>
+                        </ul>
+                        <a href="${repo.clone_url}" target="_blank" class="btn btn-success mt-2">Follow</a>
+                        </div>
+                    </div>
+                </div>
+                `
+            }, '')
+
+            reposContainer.innerHTML = repoListHtml
         }
-        xml.onerror = function() {
+        xml.onerror = function () {
             alert(this.status, this.responseText)
         }
     }
@@ -135,7 +177,7 @@ profileForm.addEventListener('submit', e => {
         alert('Search field is required!')
         return
     }
-    
+
     api = new Api()
 
     api.getUser(searchQuery)
