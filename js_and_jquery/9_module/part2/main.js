@@ -58,63 +58,92 @@ class Api {
         pagContainer.innerHTML = '', reposContainer.innerHTML = ''
 
         const $this = this
-        const xml = new XMLHttpRequest()
 
-        xml.open('GET', `${this.#baseUrl}${userName}`, true)
+        loader.style.display = 'flex'
+        fetch(`${this.#baseUrl}${userName}`)
+            .then(response => response.json())
+            .then((data) => {
+                setTimeout(() => {
+                    loader.style.display = 'none'
 
-        xml.send(null)
-
-        xml.onreadystatechange = function () {
-            switch (this.readyState) {
-                case 3:
-                    loader.style.display = 'flex'
-                    break
-                case 4:
-                    setTimeout(() => {
-                        loader.style.display = 'none'
-                    }, 1000)
-
-                    const response = JSON.parse(this.responseText)
-                    switch (this.status) {
-                        case 200:
-                            // if response finished successfully
-                            $this.profileCard = new ProfileCard(response)
-                            $this.profileCard.render(profileContainer)
+                    $this.profileCard = new ProfileCard(data)
+                    $this.profileCard.render(profileContainer)
 
 
-                            $this.reposPageCount = Math.ceil($this.profileCard.public_repos / $this.reposPerPage)
+                    $this.reposPageCount = Math.ceil($this.profileCard.public_repos / $this.reposPerPage)
 
-                            pagResult = ''
+                    pagResult = ''
 
-                            for (let i = 0; i < $this.reposPageCount; i++) {
-                                if (i >= pageCount - 3 && i < pageCount) {
-                                    pagResult += `<li class="page-item"><a class="page-link" href="#">${i + 1}</a></li>`
-                                }
-                            }
-
-                            const repoBtn = document.getElementById('repo_btn')
-
-                            repoBtn.addEventListener('click', $this.getRepoList.bind($this))
-
-                            break;
-                        case 404:
-                            // handle errors (if user not found)
-                            alert(`${this.status}, ${response.message}`)
-                            break;
+                    for (let i = 0; i < $this.reposPageCount; i++) {
+                        if (i >= pageCount - 3 && i < pageCount) {
+                            pagResult += `<li class="page-item"><a class="page-link" href="#">${i + 1}</a></li>`
+                        }
                     }
-                    break
-            }
-        }
+
+                    const repoBtn = document.getElementById('repo_btn')
+
+                    repoBtn.addEventListener('click', $this.getRepoList.bind($this))
+                }, 1000)
+
+            })
+            .catch(console.log)
+
+        // const xml = new XMLHttpRequest()
+
+        // xml.open('GET', `${this.#baseUrl}${userName}`, true)
+
+        // xml.send(null)
+
+        // xml.onreadystatechange = function () {
+        //     switch (this.readyState) {
+        //         case 3:
+        //             loader.style.display = 'flex'
+        //             break
+        //         case 4:
+        //             setTimeout(() => {
+        //                 loader.style.display = 'none'
+        //             }, 1000)
+
+        //             const response = JSON.parse(this.responseText)
+        //             switch (this.status) {
+        //                 case 200:
+        //                     // if response finished successfully
+        //                     $this.profileCard = new ProfileCard(response)
+        //                     $this.profileCard.render(profileContainer)
+
+
+        //                     $this.reposPageCount = Math.ceil($this.profileCard.public_repos / $this.reposPerPage)
+
+        //                     pagResult = ''
+
+        //                     for (let i = 0; i < $this.reposPageCount; i++) {
+        //                         if (i >= pageCount - 3 && i < pageCount) {
+        //                             pagResult += `<li class="page-item"><a class="page-link" href="#">${i + 1}</a></li>`
+        //                         }
+        //                     }
+
+        //                     const repoBtn = document.getElementById('repo_btn')
+
+        //                     repoBtn.addEventListener('click', $this.getRepoList.bind($this))
+
+        //                     break;
+        //                 case 404:
+        //                     // handle errors (if user not found)
+        //                     alert(`${this.status}, ${response.message}`)
+        //                     break;
+        //             }
+        //             break
+        //     }
+        // }
     }
 
     getRepoList() {
         if (pagResult) {
-            let hasNextRepoList = !!!(pageCount < 0 || pageCount > this.reposPageCount)
 
             pagContainer.innerHTML = `
                 <nav aria-label="Page navigation example" class="d-flex justify-content-center">
                 <ul class="pagination">
-                <li class="page-item  ${pageCount - 3 <= 0 ? 'disabled' : ''}">
+                <li class="page-item  ${pageCount <= 0 ? 'disabled' : ''}">
                     <a class="page-link" href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                     </a>
@@ -161,14 +190,16 @@ class Api {
                             }
                         }
 
-                        this.#currentPage = pageCount - 2
+                        this.#currentPage = pageCount - (this.reposPageCount === pageCount ? 3 : 2)
 
-                        console.log(this.#currentPage)
+                        console.log(pageCount, this.#currentPage)
 
 
                     } else if (typeof +currentPage === 'number') {
                         this.#currentPage = +currentPage
                     }
+
+                    let hasNextRepoList = !!!(pageCount < 0 || pageCount > this.reposPageCount)
 
                     if (hasNextRepoList) this.getRepoList()
                 })
