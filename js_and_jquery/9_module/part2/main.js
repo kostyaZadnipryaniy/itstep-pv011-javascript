@@ -6,6 +6,7 @@ const loader = document.getElementById('loader')
 
 let api = null
 let pagResult = ''
+let pageCount = 3
 
 loader.style.display = 'none'
 
@@ -49,6 +50,7 @@ class Api {
     constructor(reposPerPage = 4) {
         this.reposPerPage = reposPerPage
         this.profileCard = null
+        this.reposPageCount = 0
     }
 
     getUser(userName) {
@@ -80,12 +82,14 @@ class Api {
                             $this.profileCard.render(profileContainer)
 
 
-                            const reposPageCount = Math.ceil($this.profileCard.public_repos / $this.reposPerPage)
+                            $this.reposPageCount = Math.ceil($this.profileCard.public_repos / $this.reposPerPage)
 
                             pagResult = ''
-                         
-                            for (let i = 0; i < reposPageCount; i++) {
-                                pagResult += `<li class="page-item"><a class="page-link" href="#">${i + 1}</a></li>`
+
+                            for (let i = 0; i < $this.reposPageCount; i++) {
+                                if (i >= pageCount - 3 && i < pageCount) {
+                                    pagResult += `<li class="page-item"><a class="page-link" href="#">${i + 1}</a></li>`
+                                }
                             }
 
                             const repoBtn = document.getElementById('repo_btn')
@@ -105,16 +109,18 @@ class Api {
 
     getRepoList() {
         if (pagResult) {
+            let hasNextRepoList = !!!(pageCount < 0 || pageCount > this.reposPageCount)
+
             pagContainer.innerHTML = `
                 <nav aria-label="Page navigation example" class="d-flex justify-content-center">
                 <ul class="pagination">
-                <li class="page-item  disabled">
+                <li class="page-item  ${pageCount - 3 <= 0 ? 'disabled' : ''}">
                     <a class="page-link" href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
                 ${pagResult}
-                <li class="page-item  disabled">
+                <li class="page-item  ${pageCount >= this.reposPageCount ? 'disabled' : ''}">
                     <a class="page-link" href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                     </a>
@@ -129,16 +135,44 @@ class Api {
                 pageItems[i].addEventListener('click', e => {
                     e.preventDefault()
 
-                    const currentPage = e.target.textContent
-                    if (typeof +currentPage === 'number') {
+                    const currentPage = e.target.textContent.trim()
+
+                    if (Object.is(+currentPage, NaN)) {
+                        switch (currentPage) {
+                            case '»':
+                                pageCount += 3
+                                break;
+                            case '«':
+                                pageCount -= 3
+                                break;
+                        }
+
+                        pagResult = ''
+
+                        if (pageCount <= 0) {
+                            pageCount = 0
+                        } else if (pageCount > this.reposPageCount) {
+                            pageCount = this.reposPageCount
+                        }
+
+                        for (let i = 0; i < this.reposPageCount; i++) {
+                            if (i >= pageCount - 3 && i < pageCount) {
+                                pagResult += `<li class="page-item"><a class="page-link" href="#">${i + 1}</a></li>`
+                            }
+                        }
+
+                        this.#currentPage = pageCount - 2
+
+                        console.log(this.#currentPage)
+
+
+                    } else if (typeof +currentPage === 'number') {
                         this.#currentPage = +currentPage
                     }
 
-                    this.getRepoList()
+                    if (hasNextRepoList) this.getRepoList()
                 })
             }
-
-            pagResult = ''
         }
 
         loader.style.display = 'flex'
