@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .mess{
+            border-top: 2px solid black;
+            border-bottom: 2px solid black;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+        }
+        .colors{
+            width: 150px;
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+        #canvas{
+            border: 1px solid black;
+            margin: 5px 10%;
+        }
+        .colors>div{
+            width: 20px;
+            height: 20px;
+            border: solid 1px;
+        }
+        img{
+            width: 30px;
+            height: 30px;
+        }
+        p{
+            text-align: center;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <p>PAINT</p>
+        <div class="mess">
+            <div>
+        <input type="radio" name="figur" value="0">
+        <label for="rectangle"> <img src="https://creazilla-store.fra1.digitaloceanspaces.com/emojis/58522/orange-square-emoji-clipart-md.png" alt="rectangle"></label>
+        <input type="radio" name="figur" value="1">
+        <label for="circle"> <img src="https://img2.freepng.ru/20180131/roe/kisspng-circle-area-blue-point-angle-circle-png-file-5a71fb3274c0c3.6363676015174193144782.jpg" alt="circle"></label>
+        <input type="radio" name="figur" value="2">
+        <label for="roomb"> <img src="https://c0.klipartz.com/pngpicture/504/655/gratis-png-simbolo-logo-rombo-thumbnail.png" alt="roomb"></label>
+        <input type="radio" name="figur" value="3">
+        <label for="triangle"> <img src="https://e7.pngegg.com/pngimages/572/973/png-clipart-red-triangle-right-triangle-red-triangle-angle-photography.png" alt="triangle"></label>
+    </div>
+        <div class="colors">
+            <div class="color" style="background-color: black;">&nbsp</div>
+            <div class="color" style="background-color: grey;">&nbsp</div>
+            <div class="color" style="background-color: orange;">&nbsp</div>
+            <div class="color" style="background-color: blue;">&nbsp</div>
+            <div class="color" style="background-color: red;">&nbsp</div>
+            <div class="color" style="background-color: green;">&nbsp</div>
+            <div class="color" style="background-color: purple;">&nbsp</div>
+            <div class="color" style="background-color: white;">&nbsp</div>
+            <div class="color" style="background-color: rgb(196, 196, 196);">&nbsp</div>
+            <div class="color" style="background-color: yellow;">&nbsp</div>
+            <div class="color" style="background-color: aqua;">&nbsp</div>
+            <div class="color" style="background-color: rgb(241, 111, 111);">&nbsp</div>
+            <div class="color" style="background-color: rgb(90, 223, 90);">&nbsp</div>
+            <div class="color" style="background-color: fuchsia;">&nbsp</div>
+        </div>
+    </div>
+    </form>
+        
+        <canvas id="canvas" width="600" height="600"></canvas>
+    </div>                      
+
+
+    
+    <script src="canvas.js"></script>
+</body>
+</html>
