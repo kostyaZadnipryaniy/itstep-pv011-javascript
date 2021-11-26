@@ -55,7 +55,7 @@ class Api {
 
     getUser(userName) {
 
-        pagContainer.innerHTML = '', reposContainer.innerHTML = ''
+        pagContainer.innerHTML = '', reposContainer.innerHTML = '', this.#currentPage = 1, pageCount = 3
 
         const $this = this
 
@@ -76,11 +76,12 @@ class Api {
 
                     for (let i = 0; i < $this.reposPageCount; i++) {
                         if (i >= pageCount - 3 && i < pageCount) {
-                            pagResult += `<li class="page-item"><a class="page-link" href="#">${i + 1}</a></li>`
+                            pagResult += `<li class="page-item ${this.#currentPage === i + 1 ? 'active' : ''}"><a class="page-link" href="#">${i + 1}</a></li>`
                         }
                     }
 
                     const repoBtn = document.getElementById('repo_btn')
+
 
                     repoBtn.addEventListener('click', $this.getRepoList.bind($this))
                 }, 1000)
@@ -143,7 +144,7 @@ class Api {
             pagContainer.innerHTML = `
                 <nav aria-label="Page navigation example" class="d-flex justify-content-center">
                 <ul class="pagination">
-                <li class="page-item  ${pageCount <= 0 ? 'disabled' : ''}">
+                <li class="page-item ${pageCount - 3 <= 0 ? 'disabled' : ''}">
                     <a class="page-link" href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                     </a>
@@ -165,43 +166,52 @@ class Api {
                     e.preventDefault()
 
                     const currentPage = e.target.textContent.trim()
+                    let shouldFetch = true
 
                     if (Object.is(+currentPage, NaN)) {
+                        //console.log('prev pageCount', pageCount, 'prev current page', this.#currentPage, 'reposPageCount', this.reposPageCount)
+
                         switch (currentPage) {
                             case '»':
-                                pageCount += 3
-                                break;
+                                if (this.reposPageCount - pageCount > 0) {
+                                    pageCount += 3
+                                    this.#currentPage += 3
+
+                                    if (this.#currentPage > this.reposPageCount) {
+                                        this.#currentPage = this.reposPageCount
+                                    }
+                                } else {
+                                    shouldFetch = false
+                                }
+                                break
                             case '«':
-                                pageCount -= 3
-                                break;
+                                if (pageCount - 3 >= 1) {
+                                    pageCount -= 3
+                                    this.#currentPage -= 3
+                                } else {
+                                    shouldFetch = false
+                                }
+                                break
                         }
 
-                        pagResult = ''
+                        if (!shouldFetch) return
 
-                        if (pageCount <= 0) {
-                            pageCount = 0
-                        } else if (pageCount > this.reposPageCount) {
-                            pageCount = this.reposPageCount
-                        }
-
-                        for (let i = 0; i < this.reposPageCount; i++) {
-                            if (i >= pageCount - 3 && i < pageCount) {
-                                pagResult += `<li class="page-item"><a class="page-link" href="#">${i + 1}</a></li>`
-                            }
-                        }
-
-                        this.#currentPage = pageCount - (this.reposPageCount === pageCount ? 3 : 2)
-
-                        console.log(pageCount, this.#currentPage)
-
+                        //console.log('post pageCount', pageCount, 'post current page', this.#currentPage, 'reposPageCount', this.reposPageCount)
 
                     } else if (typeof +currentPage === 'number') {
                         this.#currentPage = +currentPage
                     }
 
-                    let hasNextRepoList = !!!(pageCount < 0 || pageCount > this.reposPageCount)
+                    pagResult = ''
 
-                    if (hasNextRepoList) this.getRepoList()
+                    for (let i = 0; i < this.reposPageCount; i++) {
+                        if (i >= pageCount - 3 && i < pageCount) {
+                            pagResult += `<li class="page-item ${this.#currentPage === i + 1 ? 'active' : ''}"><a class="page-link" href="#">${i + 1}</a></li>`
+                        }
+                    }
+
+
+                    this.getRepoList()
                 })
             }
         }
