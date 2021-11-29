@@ -8,3 +8,4 @@
 - 6_module: Проверка достоверности форм. Использование Cookie
 - 7_module: Рисование с помощью canvas.
 - 8_module: Работа с JSON
+- 9_module: AJAX
